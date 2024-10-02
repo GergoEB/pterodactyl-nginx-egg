@@ -4,9 +4,9 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-10-02T17:55:02+01:00",
+    "exported_at": "2024-10-02T20:37:02+01:00",
     "name": "Nginx",
-    "author": "GergoEB",
+    "author": "YmoT@tuta.com",
     "description": "NGINX is a free, open-source, high-performance HTTP server and reverse proxy, as well as an IMAP\/POP3 proxy server. NGINX is known for its high performance, stability, rich feature set, simple configuration, and low resource consumption.",
     "features": null,
     "docker_images": {
@@ -16,7 +16,7 @@
         "PHP 8.0": "ghcr.io\/gergoeb\/pterodactyl-nginx-egg:8.0-latest"
     },
     "file_denylist": [],
-    "startup": "{{STARTUP_COMMAND}}",
+    "startup": "rm -rf \/home\/container\/tmp\/* && echo \"[Docker] Starting PHP-FPM {{PHP_VERSION}}\" && php-fpm{{PHP_VERSION}} -c \/home\/container\/php\/php.ini --fpm-config \/home\/container\/php\/php-fpm.conf --daemonize > \/dev\/null 2>&1 && echo \"[Docker] Starting NGINX\" && echo \"[Docker] Services successfully launched\" && nginx -c \/home\/container\/nginx\/nginx.conf -p \/home\/container",
     "config": {
         "files": "{\r\n    \"nginx\/conf.d\/default.conf\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"    listen\": \"    listen {{server.build.default.port}};\",\r\n            \"    #access_log\": \"    {{env.CONSOLE_ACCESS_LOG}}access_log \/home\/container\/naccess.log;\",\r\n            \"    access_log\": \"    {{env.CONSOLE_ACCESS_LOG}}access_log \/home\/container\/naccess.log;\",\r\n            \"    #error_log\": \"    {{env.CONSOLE_ERROR_LOG}}error_log  \/home\/container\/nerror.log error;\",\r\n            \"    error_log\": \"    {{env.CONSOLE_ERROR_LOG}}error_log  \/home\/container\/nerror.log error;\",\r\n            \"    set_real_ip_from\": \"    set_real_ip_from {{env.REVERSE_PROXY_IP}};\"\r\n        }\r\n    },\r\n    \"php\/php.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"memory_limit =\": \"memory_limit = {{env.MEMORY_LIMIT}};\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"[Docker] Services successfully launched\"\r\n}",
@@ -31,16 +31,6 @@
         }
     },
     "variables": [
-        {
-            "name": "Startup Command",
-            "description": "The startup file for Nginx.",
-            "env_variable": "STARTUP_COMMAND",
-            "default_value": ".\/nginx.sh",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string",
-            "field_type": "text"
-        },
         {
             "name": "Wordpress",
             "description": "Enable or disable Wordpress<br>\r\n\r\n0 = false (default)<br>\r\n1 = true",
